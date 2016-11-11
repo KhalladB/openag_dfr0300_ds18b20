@@ -23,7 +23,6 @@
     bool get_water_temperature(std_msgs::Float32 &msg);
     
   private:
-    float getData();
     float getWEC();
     float _water_electrical_conductivity;
     bool _send_water_electrical_conductivity;
