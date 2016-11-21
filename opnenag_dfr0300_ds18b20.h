@@ -16,7 +16,7 @@
  
  class Dfr0300_Ds18b20: public Module{
   public:
-    Dfr0300(int _pin);
+    Dfr0300(int ec_pin, wt_pin);
     void begin();
     void update();
     bool get_water_electrical_conductivity(std_msgs::Float32 &msg);
