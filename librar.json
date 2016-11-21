@@ -1,0 +1,17 @@
+
+{
+    "name": "openag_dfr0300_ds18b20",
+    "keywords": "openag, dfr0300, ds18b20",
+    "description": "OpenAg driver for the DS18B20 temperature sensor & DFR0300 electric conductivity",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KhalladB/openag_dfr0300_ds18b20.git"
+    },
+    "frameworks": "arduino",
+    "platforms": "*",
+    "dependencies": [
+        {
+            "name": "DallasTemperature"
+        }
+    ]
+}
