@@ -1,0 +1,25 @@
+{
+    "description": "Driver for the DS18B20 temperature sensor",
+    "class_name": "Ds18b20",
+    "header_file": "openag_ds18b20.h",
+    "outputs": {
+        "temperature": {
+            "type": "std_msgs/Float32"
+        }
+    },
+    "arguments": [
+        {
+            "name": "pin",
+            "type": "int",
+            "default": 5
+        },
+       {
+       "name": "pin",
+       "type": "int",
+       "default": 2
+    ],
+    "dependencies": [
+        {"type": "git", "url": "https://github.com/OpenAgInitiative/openag_firmware_module.git"},
+        {"type": "pio", "id": 54}
+    ]
+}
