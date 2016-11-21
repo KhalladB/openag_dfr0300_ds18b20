@@ -17,10 +17,33 @@
  
   #include "openag_dfr0300_ds18b20.h"
   
+  Dfr0300_Ds18b20::Ds18b20(int ec_pin, wt_pin) : _oneWire(wt_pin) {
+    _sensors = DallasTemperature(&_oneWire);
+    _sensors.setWaitForConversion(false);
+    _ec_pin = ec_pin;
+    status_level = OK;
+    status_msg = "";
+ }
+  void Dfr0300_Ds18b20::begin(){
+   //Serial.begin(9600);
+   //Serial2.println("Hi");
+     _time_of_last_query = 0;
+     _ec_calibration_offset = 0.15;
+     _sensors.begin();
+     status_level = OK;
+     status_msg = "";
+     _waiting_for_conversion = false;
+     _time_of_last_query = 0;
+     if (!_sensors.getAddress(_address, 0)) {
+     status_level = ERROR;
+     status_msg = "Unable to find address for sensor";
+  }
+ }
   
-  
-  
-  
+   void Dfr0300_Ds18b20::update() {
+     getWT();
+     getWEC();
+   }
   
   
   bool Dfr0300_Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
@@ -39,11 +62,30 @@
  //.......................................Private.......................................//
  
   float Dfr0300_Ds18b20::getWT(void){
-  _sensors.requestTemperatures();
- }
+   if (_waiting_for_conversion) {
+    if (_sensors.isConversionComplete()) {
+      status_level = OK;
+      status_msg = "";
+      _waiting_for_conversion = false;
+      _water_temperature = _sensors.getTempC(_address);
+      _send_water_temperature = true;
+    }
+    else if (millis() - _time_of_last_query > _min_update_interval) {
+      status_level = ERROR;
+      status_msg = "Sensor isn't responding to queries";
+    }
+  }
+  if (millis() - _time_of_last_query > _min_update_interval) {
+    _sensors.requestTemperatures();
+    _waiting_for_conversion = true;
+    _time_of_last_query = millis();
+  }
+}
+}
  
  
  float Dfr0300_Ds18b20::getWEC(void){
+  if (millis() - _time_of_last_query > _min_update_interval) {
      int analog_sum = 0;
    const int samples = 40;
    _send_water_electrical_conductivity = true;
@@ -53,7 +95,7 @@
    }
    float analog_average = (float) analog_sum / samples;
    float analog_voltage = analog_average*(float)5000/1024;
-   float temperature_coefficient = 1.0 + 0.0185*(23.5 - 25.0);
+   float temperature_coefficient = 1.0 + 0.0185*(_water_temperature - 25.0);
    float voltage_coefficient = analog_voltage / temperature_coefficient;
    if(voltage_coefficient < 0) {
     _water_electrical_conductivity = 0;
@@ -86,7 +128,7 @@
    }
    return (_water_electrical_conductivity);
  }
- 
+ }
  }
    
  
