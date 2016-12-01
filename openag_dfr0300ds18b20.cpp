@@ -40,7 +40,7 @@
   }
  }
   
-   void Dfr0300_Ds18b20::update() {
+   void Dfr0300Ds18b20::update() {
     if (millis() - _time_of_last_query > _min_update_interval){
      getWT();
      getWEC();
@@ -63,7 +63,7 @@
  }
  //.......................................Private.......................................//
  
-  float Dfr0300_Ds18b20::getWT(void){
+  float Dfr0300Ds18b20::getWT(void){
   /* if (_waiting_for_conversion) {
 *    if (_sensors.isConversionComplete()) {
 *      status_level = OK;
@@ -123,7 +123,7 @@
 }
  
  
- float Dfr0300_Ds18b20::getWEC(void){
+ float Dfr0300Ds18b20::getWEC(void){
   //if (millis() - _time_of_last_query > _min_update_interval) {
      int analog_sum = 0;
    const int samples = 40;
