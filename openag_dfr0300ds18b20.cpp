@@ -20,13 +20,13 @@
   Dfr0300Ds18b20::Ds18b20(int wt_pin, int ec_pin){
     _wt_pin = wt_pin;
     _ec_pin = ec_pin;
+    OneWire ds(_wt_pin);
     status_level = OK;
     status_msg = "";
  }
   void Dfr0300Ds18b20::begin(){
    //Serial.begin(9600);
    //Serial2.println("Hi");
-     OneWire ds(_wt_pin);
      _time_of_last_query = 0;
      _ec_calibration_offset = 0.15;
      //_sensors.begin();
