@@ -37,7 +37,7 @@
      //if (!_sensors.getAddress(_address, 0)) {
      //status_level = ERROR;
      //status_msg = "Unable to find address for sensor";
-  }
+  //}
  }
   
    void Dfr0300Ds18b20::update() {
