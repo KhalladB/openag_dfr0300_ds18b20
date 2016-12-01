@@ -128,7 +128,8 @@
  
  float Dfr0300Ds18b20::getWEC(void){
   //if (millis() - _time_of_last_query > _min_update_interval) {
-     int analog_sum = 0;
+   delay(1000);
+   int analog_sum = 0;
    const int samples = 40;
    for (int i = 0; i<samples; i++){
      analog_sum += analogRead(_ec_pin);
