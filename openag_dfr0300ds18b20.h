@@ -25,6 +25,7 @@
     int _pin;
     int _wt_pin;
     _wt_pin = 2;
+    OneWire ds(_wt_pin);
     int _ec_pin;
   
   private:
@@ -39,7 +40,6 @@
     //OneWire _oneWire;
     //DeviceAddress _address;
     //DallasTemperature _sensors;
-    OneWire ds(_wt_pin);
     bool _send_water_temperature;
     float _water_temperature;
     bool _waiting_for_conversion;
