@@ -11,11 +11,6 @@
         }
     },
     "arguments": [
-        {
-            "name": "pin",
-            "type": "int",
-            "default": 5
-        },
        {
            "name": "pin",
            "type": "int",
