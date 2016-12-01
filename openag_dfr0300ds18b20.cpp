@@ -17,7 +17,7 @@
  
   #include "openag_dfr0300ds18b20.h"
   
- _wt_pin = 2;
+ int_wt_pin = 2;
  OneWire ds(_wt_pin);
 
   Dfr0300Ds18b20::Dfr0300Ds18b20(int ec_pin){
