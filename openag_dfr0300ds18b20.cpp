@@ -17,32 +17,34 @@
  
   #include "openag_dfr0300_ds18b20.h"
   
-  Dfr0300_Ds18b20::Ds18b20(int ec_pin, int wt_pin) : _oneWire(wt_pin) {
-    _sensors = DallasTemperature(&_oneWire);
-    _sensors.setWaitForConversion(false);
+  Dfr0300_Ds18b20::Ds18b20(int ec_pin, int wt_pin){
+    _wt_pin = wt_pin;
     _ec_pin = ec_pin;
     status_level = OK;
     status_msg = "";
  }
-  void Dfr0300_Ds18b20::begin(){
+  void Dfr0300Ds18b20::begin(){
    //Serial.begin(9600);
    //Serial2.println("Hi");
+     OneWire ds(_wt_pin);
      _time_of_last_query = 0;
      _ec_calibration_offset = 0.15;
-     _sensors.begin();
-     status_level = OK;
-     status_msg = "";
-     _waiting_for_conversion = false;
+     //_sensors.begin();
+     //status_level = OK;
+     //status_msg = "";
+     //_waiting_for_conversion = false;
      _time_of_last_query = 0;
-     if (!_sensors.getAddress(_address, 0)) {
-     status_level = ERROR;
-     status_msg = "Unable to find address for sensor";
+     //if (!_sensors.getAddress(_address, 0)) {
+     //status_level = ERROR;
+     //status_msg = "Unable to find address for sensor";
   }
  }
   
    void Dfr0300_Ds18b20::update() {
+    if (millis() - _time_of_last_query > _min_update_interval){
      getWT();
      getWEC();
+     _time_of_last_query = millis();
    }
   
   
@@ -62,40 +64,76 @@
  //.......................................Private.......................................//
  
   float Dfr0300_Ds18b20::getWT(void){
-   if (_waiting_for_conversion) {
-    if (_sensors.isConversionComplete()) {
-      status_level = OK;
-      status_msg = "";
-      _waiting_for_conversion = false;
-      _water_temperature = _sensors.getTempC(_address);
-      _send_water_temperature = true;
+  /* if (_waiting_for_conversion) {
+*    if (_sensors.isConversionComplete()) {
+*      status_level = OK;
+*      status_msg = "";
+*      _waiting_for_conversion = false;
+*      _water_temperature = _sensors.getTempC(_address);
+*      _send_water_temperature = true;
+*    }
+*    else if (millis() - _time_of_last_query > _min_update_interval) {
+*      status_level = ERROR;
+*      status_msg = "Sensor isn't responding to queries";
+*    }
+*  }
+*  if (millis() - _time_of_last_query > _min_update_interval) {
+*    _sensors.requestTemperatures();
+*    _waiting_for_conversion = true;
+*    _time_of_last_query = millis();
+*  }
+}*/
+    byte data[12];
+    byte data[8];
+    if ( !ds.search(addr)) {
+      //no more sensors on chain, reset search
+      ds.reset_search();
+      //return -1000;
     }
-    else if (millis() - _time_of_last_query > _min_update_interval) {
-      status_level = ERROR;
-      status_msg = "Sensor isn't responding to queries";
-    }
+
+  if ( OneWire::crc8( addr, 7) != addr[7]) {
+      //Serial.println("CRC is not valid!");
+      return -1000;
   }
-  if (millis() - _time_of_last_query > _min_update_interval) {
-    _sensors.requestTemperatures();
-    _waiting_for_conversion = true;
-    _time_of_last_query = millis();
+
+  if ( addr[0] != 0x10 && addr[0] != 0x28) {
+      //Serial.print("Device is not recognized");
+      //return -1000;
   }
-}
+
+   ds.reset();
+   ds.select(addr);
+   ds.write(0x44,1); // start conversion, with parasite power on at the end
+
+   byte present = ds.reset();
+   ds.select(addr);    
+   ds.write(0xBE); // Read Scratchpad
+
+   for (int i = 0; i < 9; i++) { // we need 9 bytes
+    data[i] = ds.read();
+   }
+   ds.reset_search();
+   byte MSB = data[1];
+   byte LSB = data[0];
+   float tempRead = ((MSB << 8) | LSB); //using two's compliment
+   float TemperatureSum = tempRead / 16;
+   float temp = (TemperatureSum * 18 + 5)/10 + 32;
+   _water_temperature = temp;
+   _send_send_water_temperature = true;
 }
  
  
  float Dfr0300_Ds18b20::getWEC(void){
-  if (millis() - _time_of_last_query > _min_update_interval) {
+  //if (millis() - _time_of_last_query > _min_update_interval) {
      int analog_sum = 0;
    const int samples = 40;
-   _send_water_electrical_conductivity = true;
    for (int i = 0; i<samples; i++){
      analog_sum += analogRead(_ec_pin);
      delay(2);
-   }
+   //}
    float analog_average = (float) analog_sum / samples;
    float analog_voltage = analog_average*(float)5000/1024;
-   float temperature_coefficient = 1.0 + 0.0185*(_water_temperature - 25.0);
+   float temperature_coefficient = 1.0 + 0.0185*(temp - 25.0);
    float voltage_coefficient = analog_voltage / temperature_coefficient;
    if(voltage_coefficient < 0) {
     _water_electrical_conductivity = 0;
@@ -126,7 +164,8 @@
       return (_water_electrical_conductivity); //10ms/cm<EC<20ms/cm*/
     }
    }
-   return (_water_electrical_conductivity);
+     _send_water_electrical_conductivity = true;
+     return (_water_electrical_conductivity);
  }
  }
  }
