@@ -16,12 +16,13 @@
  
  class Dfr0300Ds18b20: public Module{
   public:
-    void Dfr0300Ds18b20(int wt_pin, int ec_pin);
+    Dfr0300Ds18b20(int _pin);
     void begin();
     void update();
     bool get_water_electrical_conductivity(std_msgs::Float32 &msg);
     bool get_water_temperature(std_msgs::Float32 &msg);
     
+    int _pin;
     int _wt_pin;
     int _ec_pin;
   
@@ -40,8 +41,7 @@
     bool _send_water_temperature;
     float _water_temperature;
     bool _waiting_for_conversion;
-    
-    int pin;  
+      
     uint32_t _time_of_last_query; 
     const static uint32_t _min_update_interval = 2500;
  };
