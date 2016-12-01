@@ -17,10 +17,11 @@
  
   #include "openag_dfr0300ds18b20.h"
   
+ _wt_pin = 2;
+ OneWire ds(_wt_pin);
+
   Dfr0300Ds18b20::Dfr0300Ds18b20(int ec_pin){
-    _wt_pin = 2;
     _ec_pin = _pin;
-    OneWire ds(_wt_pin);
     status_level = OK;
     status_msg = "";
  }
