@@ -45,8 +45,8 @@
      getWT();
      getWEC();
      _time_of_last_query = millis();
+    }
    }
-  
   
   bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
    msg.data = _water_electrical_conductivity;
@@ -55,11 +55,11 @@
    return res;
  }
  
- bool Dfr0300Ds18b20::get_water_temperature(std_msgs::Float32 &msg) {
-  msg.data = _water_temperature;
-  bool res = _send_water_temperature;
-  _send_water_temperature = false;
-  return res;
+  bool Dfr0300Ds18b20::get_water_temperature(std_msgs::Float32 &msg) {
+   msg.data = _water_temperature;
+   bool res = _send_water_temperature;
+   _send_water_temperature = false;
+   return res;
  }
  //.......................................Private.......................................//
  
@@ -130,7 +130,7 @@
    for (int i = 0; i<samples; i++){
      analog_sum += analogRead(_ec_pin);
      delay(2);
-   //}
+   }
    float analog_average = (float) analog_sum / samples;
    float analog_voltage = analog_average*(float)5000/1024;
    float temperature_coefficient = 1.0 + 0.0185*(temp - 25.0);
@@ -168,4 +168,4 @@
      return (_water_electrical_conductivity);
  }
  }
- }
+ //}
