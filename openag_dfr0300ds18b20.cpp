@@ -105,7 +105,7 @@
    ds.select(addr);
    ds.write(0x44,1); // start conversion, with parasite power on at the end
 
-   byte present = ds.reset();
+   //byte present = ds.reset();
    ds.select(addr);    
    ds.write(0xBE); // Read Scratchpad
 
@@ -119,7 +119,7 @@
    float TemperatureSum = tempRead / 16;
    temp = (TemperatureSum * 18 + 5)/10 + 32;
    _water_temperature = temp;
-   _send_send_water_temperature = true;
+   _send_water_temperature = true;
    return (_water_temperature);
 }
  
