@@ -1,7 +1,7 @@
 {
     "description": "OpenAg driver for the DS18B20 temperature sensor & DFR0300 electric conductivity",
     "class_name": "Dfr0300Ds18b20",
-    "header_file": "opnenag_dfr0300ds18b20.h",
+    "header_file": "openag_dfr0300ds18b20.h",
     "outputs": {
         "water_temperature": {
             "type": "std_msgs/Float32"
