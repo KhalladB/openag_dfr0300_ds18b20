@@ -40,6 +40,8 @@
     float _water_temperature;
     bool _waiting_for_conversion;
     
-    unit32_t _time_of_last_query; 
+    uint32_t _time_of_last_query; 
     const static uint32_t _min_update_interval = 2500;
- }
+ };
+
+#endif
