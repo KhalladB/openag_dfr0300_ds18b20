@@ -17,7 +17,7 @@
  
   #include "openag_dfr0300_ds18b20.h"
   
-  Dfr0300_Ds18b20::Ds18b20(int ec_pin, int wt_pin){
+  Dfr0300_Ds18b20::Ds18b20(int wt_pin, int ec_pin){
     _wt_pin = wt_pin;
     _ec_pin = ec_pin;
     status_level = OK;
@@ -48,14 +48,14 @@
    }
   
   
-  bool Dfr0300_Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
+  bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
    msg.data = _water_electrical_conductivity;
    bool res = _send_water_electrical_conductivity;
    _send_water_electrical_conductivity = false;
    return res;
  }
  
- bool Dfr0300_Ds18b20::get_water_temperature(std_msgs::Float32 &msg) {
+ bool Dfr0300Ds18b20::get_water_temperature(std_msgs::Float32 &msg) {
   msg.data = _water_temperature;
   bool res = _send_water_temperature;
   _send_water_temperature = false;
@@ -169,5 +169,3 @@
  }
  }
  }
-   
- 
