@@ -18,8 +18,8 @@
   #include "openag_dfr0300ds18b20.h"
   
   Dfr0300Ds18b20::Ds18b20(int wt_pin, int ec_pin){
-    _wt_pin = pin;
-    _ec_pin = pin;
+    _wt_pin = wt_pin;
+    _ec_pin = ec_pin;
     status_level = OK;
     status_msg = "";
  }
