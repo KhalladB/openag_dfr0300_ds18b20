@@ -31,7 +31,8 @@
     bool _send_water_electrical_conductivity;
     float _ec_calibration_coefficient;
     float _ec_calibration_offset;
-    
+    float temp;
+  
     float getWT();
     //OneWire _oneWire;
     //DeviceAddress _address;
