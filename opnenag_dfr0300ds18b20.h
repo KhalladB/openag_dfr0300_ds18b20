@@ -1,5 +1,5 @@
- #ifndef OPENAG_DRF0300_DS18B20_H
- #define OPENAG_DFR0300_DS18B20_H
+ #ifndef OPENAG_DRF0300DS18B20_H
+ #define OPENAG_DFR0300DS18B20_H
 
 
  #if ARDUINO >= 100
@@ -11,7 +11,7 @@
  #include <OneWire.h>
  #include <openag_module.h>
  #include <std_msgs/Float32.h>
- #include <DallasTemperature.h>
+ //#include <DallasTemperature.h>
  
  
  class Dfr0300Ds18b20: public Module{
