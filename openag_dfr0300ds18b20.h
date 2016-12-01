@@ -16,7 +16,7 @@
  
  class Dfr0300Ds18b20: public Module{
   public:
-    Dfr0300Ds18b20(int _pin);
+    Dfr0300Ds18b20(int wt_pin, int ec_pin);
     void begin();
     void update();
     bool get_water_electrical_conductivity(std_msgs::Float32 &msg);
@@ -38,6 +38,7 @@
     //OneWire _oneWire;
     //DeviceAddress _address;
     //DallasTemperature _sensors;
+    OneWire ds;
     bool _send_water_temperature;
     float _water_temperature;
     bool _waiting_for_conversion;
