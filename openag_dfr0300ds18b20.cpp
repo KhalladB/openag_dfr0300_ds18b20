@@ -26,7 +26,7 @@
     status_msg = "";
  }
   void Dfr0300Ds18b20::begin(){
-   //Serial.begin(9600);
+   Serial.begin(9600);
    //Serial2.println("Hi");
      _time_of_last_query = 0;
      _ec_calibration_offset = 0.15;
@@ -120,6 +120,7 @@
    float TemperatureSum = tempRead / 16;
    temp = (TemperatureSum * 18 + 5)/10 + 32;
    _water_temperature = temp;
+   Serial.println(_water_temperature);
    _send_water_temperature = true;
    return (_water_temperature);
 }
