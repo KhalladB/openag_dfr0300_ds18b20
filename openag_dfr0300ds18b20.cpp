@@ -84,7 +84,7 @@
 *  }
 }*/
     byte data[12];
-    byte data[8];
+    byte addr[8];
     if ( !ds.search(addr)) {
       //no more sensors on chain, reset search
       ds.reset_search();
@@ -117,9 +117,10 @@
    byte LSB = data[0];
    float tempRead = ((MSB << 8) | LSB); //using two's compliment
    float TemperatureSum = tempRead / 16;
-   float temp = (TemperatureSum * 18 + 5)/10 + 32;
+   temp = (TemperatureSum * 18 + 5)/10 + 32;
    _water_temperature = temp;
    _send_send_water_temperature = true;
+   return (_water_temperature);
 }
  
  
@@ -167,5 +168,5 @@
      _send_water_electrical_conductivity = true;
      return (_water_electrical_conductivity);
  }
- }
+ //}
  //}
