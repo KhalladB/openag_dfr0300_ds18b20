@@ -23,9 +23,9 @@
     bool get_water_temperature(std_msgs::Float32 &msg);
     
     int _pin;
-    int _wt_pin;
-    _wt_pin = 2;
-    OneWire ds(_wt_pin);
+    //int _wt_pin;
+    //_wt_pin = 2;
+    //OneWire ds(_wt_pin);
     int _ec_pin;
   
   private:
