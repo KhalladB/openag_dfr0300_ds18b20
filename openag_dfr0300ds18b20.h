@@ -36,7 +36,7 @@
     float _ec_calibration_offset;
     float temp;
   
-    float getWT();
+    float getWT(bool ch);
     //OneWire _oneWire;
     //DeviceAddress _address;
     //DallasTemperature _sensors;
