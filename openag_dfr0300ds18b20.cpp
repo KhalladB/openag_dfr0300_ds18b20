@@ -44,6 +44,7 @@
    void Dfr0300Ds18b20::update() {
     if (millis() - _time_of_last_query > _min_update_interval){
      getWT();
+     delay(500);
      getWEC();
      _time_of_last_query = millis();
     }
