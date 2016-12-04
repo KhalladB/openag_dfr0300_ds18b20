@@ -31,7 +31,7 @@
     int _ec_pin;
   
   private:
-    unsigned int readings[numReadings];      // the readings from the analog input
+    //unsigned int readings[numReadings];      // the readings from the analog input
     unsigned long AnalogSampleTime,printTime,tempSampleTime;
   
     float getWEC();
