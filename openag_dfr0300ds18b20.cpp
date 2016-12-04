@@ -27,23 +27,14 @@
  }
   void Dfr0300Ds18b20::begin(){
    Serial.begin(9600);
-   //Serial2.println("Hi");
      _time_of_last_query = 0;
      _ec_calibration_offset = 0.15;
-     //_sensors.begin();
-     //status_level = OK;
-     //status_msg = "";
-     //_waiting_for_conversion = false;
      _time_of_last_query = 0;
-     //if (!_sensors.getAddress(_address, 0)) {
-     //status_level = ERROR;
-     //status_msg = "Unable to find address for sensor";
-  //}
  }
   
    void Dfr0300Ds18b20::update() {
     if (millis() - _time_of_last_query > _min_update_interval){
-     getWT();
+     getWT(readTemp);
      delay(500);
      getWEC();
      _time_of_last_query = millis();
@@ -65,49 +56,31 @@
  }
  //.......................................Private.......................................//
  
-  float Dfr0300Ds18b20::getWT(void){
-  /* if (_waiting_for_conversion) {
-*    if (_sensors.isConversionComplete()) {
-*      status_level = OK;
-*      status_msg = "";
-*      _waiting_for_conversion = false;
-*      _water_temperature = _sensors.getTempC(_address);
-*      _send_water_temperature = true;
-*    }
-*    else if (millis() - _time_of_last_query > _min_update_interval) {
-*      status_level = ERROR;
-*      status_msg = "Sensor isn't responding to queries";
-*    }
-*  }
-*  if (millis() - _time_of_last_query > _min_update_interval) {
-*    _sensors.requestTemperatures();
-*    _waiting_for_conversion = true;
-*    _time_of_last_query = millis();
-*  }
-}*/
-    byte data[12];
-    byte addr[8];
+  float Dfr0300Ds18b20::getWT(bool ch){
+    static byte data[12];
+    static byte addr[8];
+   if(!ch){
     if ( !ds.search(addr)) {
       //no more sensors on chain, reset search
       ds.reset_search();
-      //return -1000;
+      return 0;
     }
 
-  if ( OneWire::crc8( addr, 7) != addr[7]) {
+   if ( OneWire::crc8( addr, 7) != addr[7]) {
       //Serial.println("CRC is not valid!");
-      return -1000;
+      return 0;
   }
 
   if ( addr[0] != 0x10 && addr[0] != 0x28) {
       //Serial.print("Device is not recognized");
-      //return -1000;
+      return 0;
   }
-
    ds.reset();
    ds.select(addr);
    ds.write(0x44,1); // start conversion, with parasite power on at the end
-
-   //byte present = ds.reset();
+  }
+  else {
+   byte present = ds.reset();
    ds.select(addr);    
    ds.write(0xBE); // Read Scratchpad
 
@@ -119,17 +92,17 @@
    byte LSB = data[0];
    float tempRead = ((MSB << 8) | LSB); //using two's compliment
    float TemperatureSum = tempRead / 16;
-   temp = (TemperatureSum * 18 + 5)/10 + 32;
    _water_temperature = temp;
    Serial.println(_water_temperature);
    _send_water_temperature = true;
+  }
    return (_water_temperature);
 }
  
  
  float Dfr0300Ds18b20::getWEC(void){
   //if (millis() - _time_of_last_query > _min_update_interval) {
-   delay(1000);
+   //delay(1000);
    int analog_sum = 0;
    const int samples = 40;
    for (int i = 0; i<samples; i++){
