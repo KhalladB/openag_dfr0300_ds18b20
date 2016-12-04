@@ -43,7 +43,7 @@
     if (millis() - _time_of_last_query > _min_update_interval){
      delay(1000);
      getWT(readTemp);
-     delay(500);
+     delay(1000);
      getWEC();
      _time_of_last_query = millis();
     }
