@@ -45,7 +45,7 @@
     bool _waiting_for_conversion;
       
     uint32_t _time_of_last_query; 
-    const static uint32_t _min_update_interval = 2500;
+    const static uint32_t _min_update_interval = 2000;
  };
 
 #endif
