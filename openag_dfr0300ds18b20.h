@@ -13,6 +13,8 @@
  #include <std_msgs/Float32.h>
  //#include <DallasTemperature.h>
  
+ #define startConvvert 0
+ #define readTemp 1
  
  class Dfr0300Ds18b20: public Module{
   public:
