@@ -26,7 +26,14 @@
     status_msg = "";
  }
   void Dfr0300Ds18b20::begin(){
-   Serial.begin(9600);
+    Serial.begin(9600);
+    for (byte thisReading = 0; thisReading < numReadings; thisReading++){
+      readings[thisReading] = 0;
+      getWT(startConvert);   //let the DS18B20 start the convert
+      AnalogSampleTime=millis();
+      printTime=millis();
+      tempSampleTime=millis();
+    }
      _time_of_last_query = 0;
      _ec_calibration_offset = 0.15;
      _time_of_last_query = 0;
@@ -34,6 +41,7 @@
   
    void Dfr0300Ds18b20::update() {
     if (millis() - _time_of_last_query > _min_update_interval){
+     delay(1000);
      getWT(readTemp);
      delay(500);
      getWEC();
