@@ -45,13 +45,17 @@
     unsigned long AnalogValueTotal = 0;                  // the running total
     unsigned int AnalogAverage = 0,averageVoltage=0;                // the average
     unsigned long AnalogSampleTime,printTime,tempSampleTime;
-    float temperature,ECcurrent; 
+    float temperature;
+    float temp;
+    float ECcurrent; 
     
     float getWT(bool ch);
     bool _send_water_temperature;
     float _water_temperature;
     bool _send_water_electrical_conductivity;
-    float _water_electrical_conductivity;   
+    float _water_electrical_conductivity; 
+    uint32_t _time_of_last_query; 
+    const static uint32_t _min_update_interval = 2000;
   private: 
  
   //unsigned int readings[numReadings];      // the readings from the analog input
