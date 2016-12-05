@@ -40,7 +40,7 @@
     int _ec_pin;*/
   
   private: 
-    const byte numReadings = 20;     //the number of sample times
+    const int numReadings = 40;     //the number of sample times
     //byte ECsensorPin = A1;  //EC Meter analog output,pin on analog 1
     //byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
     unsigned int AnalogSampleInterval=25,printInterval=700,tempSampleInterval=850;  //analog sample interval;serial print interval;temperature sample interval
