@@ -16,15 +16,17 @@
  */
  
   #include "openag_dfr0300ds18b20.h"
- 
+      
+  int _wt_pin = 2;
   OneWire ds(_wt_pin);
+  int _ec_pin = 2;
   
   Dfr0300Ds18b20::Dfr0300Ds18b20(int _pin){
     status_level = OK;
     status_msg = "";
   }
   
-  Dfr0300Ds18b20::begin(){
+  void Dfr0300Ds18b20::begin(){
     for (byte thisReading = 0; thisReading < numReadings; thisReading++)
     readings[thisReading] = 0;
     TempProcess(StartConvert);   //let the DS18B20 start the convert
@@ -33,7 +35,7 @@
     tempSampleTime=millis();
   }
 
-  Dfr0300Ds18b20::update(){
+  void Dfr0300Ds18b20::update(){
    if (millis() - _time_of_last_query > _min_update_interval){
      if(millis()-AnalogSampleTime>=AnalogSampleInterval){
        AnalogSampleTime=millis(); 
@@ -99,6 +101,7 @@
      _
     }
   }
+}
 
   bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
    msg.data = _water_electrical_conductivity;
@@ -307,19 +310,19 @@
   else { 
     if(voltage_coefficient <= 448) {
       _water_electrical_conductivity = (6.84*voltage_coefficient-64.32)/1000 + _ec_calibration_offset;
-      /*Serial2.print("448: ");
+      //Serial2.print("448: ");
       Serial2.println(_water_electrical_conductivity); 
       return (_water_electrical_conductivity);   //1ms/cm<EC<=3ms/cm/
     }
     else if (voltage_coefficient <= 1457) {
       _water_electrical_conductivity = (6.98*voltage_coefficient-127)/1000 + _ec_calibration_offset;
-      /*Serial2.print("1457: ");
+      //Serial2.print("1457: ");
       Serial2.println(_water_electrical_conductivity);
       return (_water_electrical_conductivity);  //3ms/cm<EC<=10ms/cm/
     }
     else {
       _water_electrical_conductivity = (5.3*voltage_coefficient+2278)/1000 + _ec_calibration_offset;
-      /*Serial2.print("else: ");
+      //Serial2.print("else: ");
       Serial2.println(_water_electrical_conductivity); 
       return (_water_electrical_conductivity); //10ms/cm<EC<20ms/cm/
     }
