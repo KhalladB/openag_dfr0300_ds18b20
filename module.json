@@ -1,7 +1,7 @@
 {
-    "description": "Driver for the DS18B20 temperature sensor",
-    "class_name": "Dfr0300_Ds18b20",
-    "header_file": "opnenag_dfr0300_ds18b20.h",
+    "description": "OpenAg driver for the DS18B20 temperature sensor & DFR0300 electric conductivity",
+    "class_name": "Dfr0300Ds18b20",
+    "header_file": "openag_dfr0300ds18b20.h",
     "outputs": {
         "water_temperature": {
             "type": "std_msgs/Float32"
@@ -11,11 +11,6 @@
         }
     },
     "arguments": [
-        {
-            "name": "pin",
-            "type": "int",
-            "default": 5
-        },
        {
            "name": "pin",
            "type": "int",
@@ -23,7 +18,6 @@
        }
     ],
     "dependencies": [
-        {"type": "git", "url": "https://github.com/OpenAgInitiative/openag_firmware_module.git"},
-        {"type": "pio", "id": 54}
+        {"type": "git", "url": "https://github.com/OpenAgInitiative/openag_firmware_module.git"}
     ]
 }
