@@ -29,10 +29,11 @@
   void Dfr0300Ds18b20::begin(){
     for (byte thisReading = 0; thisReading < numReadings; thisReading++)
     readings[thisReading] = 0;
-    TempProcess(StartConvert);   //let the DS18B20 start the convert
+    getWT(startConvert);   //let the DS18B20 start the convert
     AnalogSampleTime=millis();
     printTime=millis();
     tempSampleTime=millis();
+     _time_of_last_query = 0;
   }
 
   void Dfr0300Ds18b20::update(){
@@ -96,11 +97,11 @@
      _time_of_last_query = millis();
      _send_water_temperature = true;
      _send_water_electrical_conductivity = true;
-     _water_temperature = TemperatureSum;
+     _water_temperature = Temp;
      _water_electrical_conductivity = ECcurrnet;
-     _
-    }
   }
+}
+}
 }
 
   bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
@@ -154,8 +155,9 @@
           byte LSB = data[0];        
           float tempRead = ((MSB << 8) | LSB); //using two's compliment
           TemperatureSum = tempRead / 16;
+          Temp = TemperatureSum;
     }
-          return (TemperatureSum);  
+          return (Temp);  
  }
 
 
