@@ -20,7 +20,7 @@
   int _wt_pin = 2;
   OneWire ds(_wt_pin);
   int _ec_pin = 2;
-  float temp;
+  float Temp;
   float ECcurrent;
 
   Dfr0300Ds18b20::Dfr0300Ds18b20(int _pin){
@@ -57,7 +57,7 @@
   */
    if(millis()-tempSampleTime>=tempSampleInterval){
     tempSampleTime=millis();
-    temperature = getWT(ReadTemperature);  // read the current temperature from the  DS18B20
+    temperature = getWT(readTemp);  // read the current temperature from the  DS18B20
     getWT(startConvert);                   //after the reading,start the convert for next reading
    }
    /*
@@ -91,7 +91,7 @@
      _send_water_temperature = true;
      _send_water_electrical_conductivity = true;
      _water_temperature = Temp;
-     _water_electrical_conductivity = ECcurrnet;
+     _water_electrical_conductivity = ECcurrent;
   }
   }
 }
