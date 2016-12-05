@@ -92,11 +92,68 @@
   }
  }
      _time_of_last_query = millis();
+     _send_water_temperature = true;
+     _send_water_electrical_conductivity = true;
+     _water_temperature = TemperatureSum;
+     _water_electrical_conductivity = ECcurrnet;
+     _
     }
   }
 
+  bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
+   msg.data = _water_electrical_conductivity;
+   bool res = _send_water_electrical_conductivity;
+   _send_water_electrical_conductivity = false;
+   return res;
+ }
+ 
+  bool Dfr0300Ds18b20::get_water_temperature(std_msgs::Float32 &msg) {
+   msg.data = _water_temperature;
+   bool res = _send_water_temperature;
+   _send_water_temperature = false;
+   return res;
+ }
 
+//.......//
 
+ float Dfr0300Ds18b20::getWT(bool ch){
+     //returns the temperature from one DS18B20 in DEG Celsius
+  static byte data[12];
+  static byte addr[8];
+  static float TemperatureSum;
+  if(!ch){
+          if ( !ds.search(addr)) {
+              Serial.println("no more sensors on chain, reset search!");
+              ds.reset_search();
+              return 0;
+          }      
+          if ( OneWire::crc8( addr, 7) != addr[7]) {
+              Serial.println("CRC is not valid!");
+              return 0;
+          }        
+          if ( addr[0] != 0x10 && addr[0] != 0x28) {
+              Serial.print("Device is not recognized!");
+              return 0;
+          }      
+          ds.reset();
+          ds.select(addr);
+          ds.write(0x44,1); // start conversion, with parasite power on at the end
+  }
+  else{  
+          byte present = ds.reset();
+          ds.select(addr);    
+          ds.write(0xBE); // Read Scratchpad            
+          for (int i = 0; i < 9; i++) { // we need 9 bytes
+            data[i] = ds.read();
+          }         
+          ds.reset_search();           
+          byte MSB = data[1];
+          byte LSB = data[0];        
+          float tempRead = ((MSB << 8) | LSB); //using two's compliment
+          TemperatureSum = tempRead / 16;
+    }
+          return (TemperatureSum);  
+ }
 
 
 
