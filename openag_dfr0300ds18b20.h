@@ -22,6 +22,7 @@
     void begin();
     void update();
     bool get_water_temperature(std_msgs::Float32 &msg);
+    bool get_water_electrical_conductivity(std_msgs::Float32 &msg);
     
     int _pin;
     int _wt_pin = 2;
@@ -39,9 +40,9 @@
     int _ec_pin;*/
   
   private: 
-    const byte numReadings = 40;     //the number of sample times
-    byte ECsensorPin = A1;  //EC Meter analog output,pin on analog 1
-    byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
+    const byte numReadings = 20;     //the number of sample times
+    //byte ECsensorPin = A1;  //EC Meter analog output,pin on analog 1
+    //byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
     unsigned int AnalogSampleInterval=25,printInterval=700,tempSampleInterval=850;  //analog sample interval;serial print interval;temperature sample interval
     unsigned int readings[numReadings];      // the readings from the analog input
     byte index = 0;                  // the index of the current reading
@@ -51,8 +52,10 @@
     float temperature,ECcurrent; 
     
     float getWT(bool ch);
-   
-  
+    bool _send_water_temperature;
+    float _water_temperature;
+    bool _send_water_electrical_conductivity;
+    float _water_electrical_conductivity;  
   //unsigned int readings[numReadings];      // the readings from the analog input
     /*unsigned long AnalogSampleTime,printTime,tempSampleTime;
   
