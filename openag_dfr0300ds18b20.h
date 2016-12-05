@@ -38,8 +38,6 @@
     //_wt_pin = 2;
     //OneWire ds(_wt_pin);
     int _ec_pin;*/
-  
-  private: 
     const int numReadings = 40;     //the number of sample times
     //byte ECsensorPin = A1;  //EC Meter analog output,pin on analog 1
     //byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
@@ -55,7 +53,9 @@
     bool _send_water_temperature;
     float _water_temperature;
     bool _send_water_electrical_conductivity;
-    float _water_electrical_conductivity;  
+    float _water_electrical_conductivity;   
+  private: 
+ 
   //unsigned int readings[numReadings];      // the readings from the analog input
     /*unsigned long AnalogSampleTime,printTime,tempSampleTime;
   
