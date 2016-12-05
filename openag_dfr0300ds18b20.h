@@ -42,7 +42,7 @@
     //byte ECsensorPin = A1;  //EC Meter analog output,pin on analog 1
     //byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
     unsigned int AnalogSampleInterval=25,printInterval=700,tempSampleInterval=850;  //analog sample interval;serial print interval;temperature sample interval
-    unsigned int readings[numReadings];      // the readings from the analog input
+    unsigned int readings[40];      // the readings from the analog input
     byte index = 0;                  // the index of the current reading
     unsigned long AnalogValueTotal = 0;                  // the running total
     unsigned int AnalogAverage = 0,averageVoltage=0;                // the average
