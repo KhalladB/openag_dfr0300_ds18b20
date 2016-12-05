@@ -20,7 +20,9 @@
   int _wt_pin = 2;
   OneWire ds(_wt_pin);
   int _ec_pin = 2;
-  
+  float temp;
+  float ECcurrent;
+
   Dfr0300Ds18b20::Dfr0300Ds18b20(int _pin){
     status_level = OK;
     status_msg = "";
@@ -53,17 +55,15 @@
    Every once in a while,MCU read the temperature from the DS18B20 and then let the DS18B20 start the convert.
    Attention:The interval between start the convert and read the temperature should be greater than 750 millisecond,or the temperature is not accurate!
   */
-   if(millis()-tempSampleTime>=tempSampleInterval) 
-  {
+   if(millis()-tempSampleTime>=tempSampleInterval){
     tempSampleTime=millis();
     temperature = getWT(ReadTemperature);  // read the current temperature from the  DS18B20
-    TempProcess(StartConvert);                   //after the reading,start the convert for next reading
-  }
+    getWT(startConvert);                   //after the reading,start the convert for next reading
+   }
    /*
    Every once in a while,print the information on the serial monitor.
   */
-  if(millis()-printTime>=printInterval)
-  {
+  if(millis()-printTime>=printInterval){
     printTime=millis();
     averageVoltage=AnalogAverage*(float)5000/1024;
     Serial.print("Analog value:");
@@ -77,31 +77,23 @@
     
     float TempCoefficient=1.0+0.0185*(temperature-25.0);    //temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.0185*(fTP-25.0));
     float CoefficientVolatge=(float)averageVoltage/TempCoefficient;   
-    if(CoefficientVolatge<150){
-     Serial.println("No solution!");   //25^C 1413us/cm<-->about 216mv  if the voltage(compensate)<150,that is <1ms/cm,out of the range
-    }
-    else if(CoefficientVolatge>3300){
-     Serial.println("Out of the range!");  //>20ms/cm,out of the range
-    }
-    else
-    { 
+     if(CoefficientVolatge<150)Serial.println("No solution!");   //25^C 1413us/cm<-->about 216mv  if the voltage(compensate)<150,that is <1ms/cm,out of the range
+     else if(CoefficientVolatge>3300)Serial.println("Out of the range!");  //>20ms/cm,out of the range
+     else { 
       if(CoefficientVolatge<=448)ECcurrent=6.84*CoefficientVolatge-64.32;   //1ms/cm<EC<=3ms/cm
       else if(CoefficientVolatge<=1457)ECcurrent=6.98*CoefficientVolatge-127;  //3ms/cm<EC<=10ms/cm
       else ECcurrent=5.3*CoefficientVolatge+2278;                           //10ms/cm<EC<20ms/cm
       ECcurrent/=1000;    //convert us/cm to ms/cm
       Serial.print(ECcurrent,2);  //two decimal
       Serial.println("ms/cm");
-    }
-  }
- }
+      }
      _time_of_last_query = millis();
      _send_water_temperature = true;
      _send_water_electrical_conductivity = true;
      _water_temperature = Temp;
      _water_electrical_conductivity = ECcurrnet;
   }
-}
-}
+  }
 }
 
   bool Dfr0300Ds18b20::get_water_electrical_conductivity(std_msgs::Float32 &msg){
