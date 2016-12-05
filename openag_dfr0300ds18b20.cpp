@@ -16,8 +16,125 @@
  */
  
   #include "openag_dfr0300ds18b20.h"
+ 
+  OneWire ds(_wt_pin);
   
- int _wt_pin = 5;
+  Dfr0300Ds18b20::Dfr0300Ds18b20(int _pin){
+    status_level = OK;
+    status_msg = "";
+  }
+  
+  Dfr0300Ds18b20::begin(){
+    for (byte thisReading = 0; thisReading < numReadings; thisReading++)
+    readings[thisReading] = 0;
+    TempProcess(StartConvert);   //let the DS18B20 start the convert
+    AnalogSampleTime=millis();
+    printTime=millis();
+    tempSampleTime=millis();
+  }
+
+  Dfr0300Ds18b20::update(){
+   if (millis() - _time_of_last_query > _min_update_interval){
+     if(millis()-AnalogSampleTime>=AnalogSampleInterval){
+       AnalogSampleTime=millis(); 
+       AnalogValueTotal = AnalogValueTotal - readings[index]; // subtract the last reading
+       readings[index] = analogRead(_ec_pin); // read from the sensor
+       AnalogValueTotal = AnalogValueTotal + readings[index]; // add the reading to the total
+       index = index + 1; // advance to the next position in the array:
+       if (index >= numReadings){    // advance to the next position in the array
+        index = 0;     // ...wrap around to the beginning:
+       }
+       AnalogAverage = AnalogValueTotal / numReadings; // calculate the average
+     }
+  /*
+   Every once in a while,MCU read the temperature from the DS18B20 and then let the DS18B20 start the convert.
+   Attention:The interval between start the convert and read the temperature should be greater than 750 millisecond,or the temperature is not accurate!
+  */
+   if(millis()-tempSampleTime>=tempSampleInterval) 
+  {
+    tempSampleTime=millis();
+    temperature = getWT(ReadTemperature);  // read the current temperature from the  DS18B20
+    TempProcess(StartConvert);                   //after the reading,start the convert for next reading
+  }
+   /*
+   Every once in a while,print the information on the serial monitor.
+  */
+  if(millis()-printTime>=printInterval)
+  {
+    printTime=millis();
+    averageVoltage=AnalogAverage*(float)5000/1024;
+    Serial.print("Analog value:");
+    Serial.print(AnalogAverage);   //analog average,from 0 to 1023
+    Serial.print("    Voltage:");
+    Serial.print(averageVoltage);  //millivolt average,from 0mv to 4995mV
+    Serial.print("mV    ");
+    Serial.print("temp:");
+    Serial.print(temperature);    //current temperature
+    Serial.print("^C     EC:");
+    
+    float TempCoefficient=1.0+0.0185*(temperature-25.0);    //temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.0185*(fTP-25.0));
+    float CoefficientVolatge=(float)averageVoltage/TempCoefficient;   
+    if(CoefficientVolatge<150){
+     Serial.println("No solution!");   //25^C 1413us/cm<-->about 216mv  if the voltage(compensate)<150,that is <1ms/cm,out of the range
+    }
+    else if(CoefficientVolatge>3300){
+     Serial.println("Out of the range!");  //>20ms/cm,out of the range
+    }
+    else
+    { 
+      if(CoefficientVolatge<=448)ECcurrent=6.84*CoefficientVolatge-64.32;   //1ms/cm<EC<=3ms/cm
+      else if(CoefficientVolatge<=1457)ECcurrent=6.98*CoefficientVolatge-127;  //3ms/cm<EC<=10ms/cm
+      else ECcurrent=5.3*CoefficientVolatge+2278;                           //10ms/cm<EC<20ms/cm
+      ECcurrent/=1000;    //convert us/cm to ms/cm
+      Serial.print(ECcurrent,2);  //two decimal
+      Serial.println("ms/cm");
+    }
+  }
+ }
+     _time_of_last_query = millis();
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//...................................Old.....................................//
+ /*int _wt_pin = 5;
  OneWire ds(_wt_pin);
 
   Dfr0300Ds18b20::Dfr0300Ds18b20(int ec_pin){
@@ -135,23 +252,24 @@
       _water_electrical_conductivity = (6.84*voltage_coefficient-64.32)/1000 + _ec_calibration_offset;
       /*Serial2.print("448: ");
       Serial2.println(_water_electrical_conductivity); 
-      return (_water_electrical_conductivity);   //1ms/cm<EC<=3ms/cm*/
+      return (_water_electrical_conductivity);   //1ms/cm<EC<=3ms/cm/
     }
     else if (voltage_coefficient <= 1457) {
       _water_electrical_conductivity = (6.98*voltage_coefficient-127)/1000 + _ec_calibration_offset;
       /*Serial2.print("1457: ");
       Serial2.println(_water_electrical_conductivity);
-      return (_water_electrical_conductivity);  //3ms/cm<EC<=10ms/cm*/
+      return (_water_electrical_conductivity);  //3ms/cm<EC<=10ms/cm/
     }
     else {
       _water_electrical_conductivity = (5.3*voltage_coefficient+2278)/1000 + _ec_calibration_offset;
       /*Serial2.print("else: ");
       Serial2.println(_water_electrical_conductivity); 
-      return (_water_electrical_conductivity); //10ms/cm<EC<20ms/cm*/
+      return (_water_electrical_conductivity); //10ms/cm<EC<20ms/cm/
     }
    }
      _send_water_electrical_conductivity = true;
      return (_water_electrical_conductivity);
  }
  //}
- //}
+ //}*/
+
