@@ -46,8 +46,7 @@
     unsigned int AnalogAverage = 0,averageVoltage=0;                // the average
     unsigned long AnalogSampleTime,printTime,tempSampleTime;
     float temperature;
-    float temp;
-    float ECcurrent; 
+ 
     
     float getWT(bool ch);
     bool _send_water_temperature;
