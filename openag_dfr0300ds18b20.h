@@ -25,8 +25,6 @@
     bool get_water_electrical_conductivity(std_msgs::Float32 &msg);
     
     int _pin;
-    int _wt_pin = 2;
-    int _ec_pin = 2;
     /*Dfr0300Ds18b20(int ec_pin);
     void begin();
     void update();
