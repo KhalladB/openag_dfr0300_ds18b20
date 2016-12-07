@@ -62,22 +62,22 @@ void Dfr0300Ds18b20::update(){
    /*
    Every once in a while,print the information on the serial monitor.
   */
-  if(millis()-printTime>=printInterval){
-   printTime=millis();
+  //if(millis()-printTime>=printInterval){
+   //printTime=millis();
    averageVoltage=AnalogAverage*(float)5000/1024;
    float TempCoefficient=1.0+0.0185*(temperature-25.0);    //temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.0185*(fTP-25.0));
    float CoefficientVolatge=(float)averageVoltage/TempCoefficient;  
    
-   if(CoefficientVolatge<150)Serial.println("No solution!");   //25^C 1413us/cm<-->about 216mv  if the voltage(compensate)<150,that is <1ms/cm,out of the range
-   else if(CoefficientVolatge>3300)Serial.println("Out of the range!");  //>20ms/cm,out of the range
+   if(CoefficientVolatge<150)//Serial.println("No solution!");   //25^C 1413us/cm<-->about 216mv  if the voltage(compensate)<150,that is <1ms/cm,out of the range
+   else if(CoefficientVolatge>3300)//Serial.println("Out of the range!");  //>20ms/cm,out of the range
    else{ 
     if(CoefficientVolatge<=448)ECcurrent=6.84*CoefficientVolatge-64.32;   //1ms/cm<EC<=3ms/cm
     else if(CoefficientVolatge<=1457)ECcurrent=6.98*CoefficientVolatge-127;  //3ms/cm<EC<=10ms/cm
     else ECcurrent=5.3*CoefficientVolatge+2278;                           //10ms/cm<EC<20ms/cm
     ECcurrent/=1000;    //convert us/cm to ms/cm
-    Serial.print(ECcurrent,2);  //two decimal
-    Serial.println("ms/cm");
-   }
+    //Serial.print(ECcurrent,2);  //two decimal
+    //Serial.println("ms/cm");
+   //}
    _time_of_last_query = millis();
    _send_water_temperature = true;
    _send_water_electrical_conductivity = true;
