@@ -4,6 +4,9 @@
 - Connect dfr0300 to Analog Pin 2. Connect ds18b20 to Digital Pin 5.
 - On ChouchDB Firmware Module Type
 
+
+
+
     {
     "_id": "dfr0300ds18b20",
     "description": "OpenAg driver for the DS18B20 temperature sensor & DFR0300 electric conductivity",
