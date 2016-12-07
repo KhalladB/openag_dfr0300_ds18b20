@@ -41,6 +41,6 @@ class Dfr0300Ds18b20: public Module{
  bool _send_water_electrical_conductivity;
  float _water_electrical_conductivity; 
  uint32_t _time_of_last_query; 
- const static uint32_t _min_update_interval = 2500;
+ const static uint32_t _min_update_interval = 2750;
  };
 #endif
