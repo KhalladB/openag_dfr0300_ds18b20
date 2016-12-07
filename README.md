@@ -38,7 +38,7 @@
    
 - On ChouchDB Firmware Module
 
-  "{
+   {
    "_id": "dfr0300ds18b20_1",
    "environment": "environment_1",
    "type": "dfr0300ds18b20",
@@ -50,4 +50,4 @@
      "variable": "water_electrical_conductivity"
      }
     }
-  }"
+  }
