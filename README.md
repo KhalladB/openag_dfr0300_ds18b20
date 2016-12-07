@@ -5,7 +5,7 @@
 - On ChouchDB Firmware Module Type
     
     {
-    "_id": "dfr0300ds18b20",
+     "_id": "dfr0300ds18b20",
     "description": "OpenAg driver for the DS18B20 temperature sensor & DFR0300 electric conductivity",
     "repository": {
      "url": "https://github.com/KhalladB/openag_dfr0300ds18b20.git",
@@ -37,8 +37,7 @@
    }
    
 - On ChouchDB Firmware Module
-
-    "{
+{
    "_id": "dfr0300ds18b20_1",
    "environment": "environment_1",
    "type": "dfr0300ds18b20",
