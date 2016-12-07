@@ -37,16 +37,17 @@
    }
    
 - On ChouchDB Firmware Module
-* {
+
+  "{
    "_id": "dfr0300ds18b20_1",
    "environment": "environment_1",
    "type": "dfr0300ds18b20",
    "outputs": {
-       "water_temperature": {
-           "variable": "water_temperature"
-       },
-       "water_electrical_conductivity": {
-           "variable": "water_electrical_conductivity"
-       }
+     "water_temperature": {
+     "variable": "water_temperature"
+     },
+     "water_electrical_conductivity": {
+     "variable": "water_electrical_conductivity"
+     }
     }
   }"
