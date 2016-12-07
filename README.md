@@ -3,6 +3,7 @@
 - In dfr0300 in order to get the value of electric conductivity, temperature of water is needed.
 - Connect dfr0300 to Analog Pin 2. Connect ds18b20 to Digital Pin 5.
 - On ChouchDB Firmware Module Type
+
  "{
    "_id": "dfr0300ds18b20",
    "_rev": "5-a011b347fd414a37687de70014387580",
@@ -36,6 +37,7 @@
    ]
 }"
 - On ChouchDB Firmware Module
+
     "{
    "_id": "dfr0300ds18b20_1",
    "environment": "environment_1",
