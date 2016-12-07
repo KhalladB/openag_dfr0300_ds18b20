@@ -26,7 +26,7 @@ class Dfr0300Ds18b20: public Module{
  // Public Variables
  int _pin;
  const int numReadings = 40;     //the number of sample times
- unsigned int AnalogSampleInterval=25,printInterval=700,tempSampleInterval=850;  //analog sample interval;serial print interval;temperature sample interval
+ unsigned int AnalogSampleInterval=25,printInterval=700,tempSampleInterval=800;  //analog sample interval;serial print interval;temperature sample interval
  unsigned int readings[40];      // the readings from the analog input
  byte index = 0;                  // the index of the current reading
  unsigned long AnalogValueTotal = 0;                  // the running total
@@ -41,6 +41,6 @@ class Dfr0300Ds18b20: public Module{
  bool _send_water_electrical_conductivity;
  float _water_electrical_conductivity; 
  uint32_t _time_of_last_query; 
- const static uint32_t _min_update_interval = 2000;
+ const static uint32_t _min_update_interval = 2500;
  };
 #endif
