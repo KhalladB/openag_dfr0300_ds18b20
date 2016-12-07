@@ -54,11 +54,12 @@ void Dfr0300Ds18b20::update(){
    Every once in a while,MCU read the temperature from the DS18B20 and then let the DS18B20 start the convert.
    Attention:The interval between start the convert and read the temperature should be greater than 750 millisecond,or the temperature is not accurate!
   */
-  if(millis()-tempSampleTime>=tempSampleInterval){
+  while(millis()-tempSampleTime<tempSampleInterval);
+  //if(millis()-tempSampleTime>=tempSampleInterval){
    tempSampleTime=millis();
    temperature = getWT(readTemp);  // read the current temperature from the  DS18B20
    getWT(startConvert);                   //after the reading,start the convert for next reading
-  }
+  //}
    /*
    Every once in a while,print the information on the serial monitor.
   */
